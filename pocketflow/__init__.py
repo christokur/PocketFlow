@@ -29,6 +29,8 @@ class Node(BaseNode):
     def _exec(self,prep_res):
         for self.cur_retry in range(self.max_retries):
             try: return self.exec(prep_res)
+            except (SystemExit, KeyboardInterrupt):
+                raise
             except Exception as e:
                 if self.cur_retry>=self.max_retries-1: return self.exec_fallback(prep_res,e)
                 if self.wait>0: time.sleep(self.wait)
